@@ -119,6 +119,7 @@ public class GUI extends UI {
         Object[] nivells = {0, 1, 2, 3, 4};
         int nivellIA = (int) JOptionPane.showInputDialog(null, "Tria el nivell de dificultat (0 és el més fàcil)", "", JOptionPane.QUESTION_MESSAGE, null, nivells, nivells[0]);
         return nivellIA;
+ 
     }
 
     //demanarà el nom al jugador i el guardarà
