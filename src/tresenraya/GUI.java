@@ -5,6 +5,7 @@ import java.awt.Container;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Label;
+import java.util.Random;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -17,25 +18,23 @@ import javax.swing.JPanel;
 public class GUI extends UI {
 
 //atributs
-    //labels
     Label texteVictories = new Label();
     Label texteDerrotes = new Label();
     Label texteEmpats = new Label();
     Label texteEstat = new Label();
     Label texteWarning = new Label();
     Label texteWarning2 = new Label();
-    //fonts
+    Label texteNivellIA = new Label();
     Font fuente = new Font("Arial", Font.BOLD, 30);
     Font fuente2 = new Font("Arial", Font.PLAIN, 17);
-    //Botons
     JButton boto = new JButton();
     JButton[][] arrayBotons = new JButton[3][3];
-    //altres
     String[][] valorCaselles = new String[3][3];
     Posicion buzon;
     String buzon2;
     String nom;
     int auxiliar = 0;
+    int nivellIA;
 
 //constructor
     public GUI() {
@@ -66,10 +65,15 @@ public class GUI extends UI {
         texteEstat.setSize(150, 50);
         texteEstat.setLocation(0, 0);
         texteEstat.setFont(fuente2);
+        texteNivellIA.setSize(150, 50);
+        texteNivellIA.setLocation(20, 0);
+        texteNivellIA.setFont(fuente2);
         if (partidaFinalitzada == -1) {
-            texteEstat.setText("Partida en curs");
+            texteEstat.setText("Partida en curs.");
+            texteNivellIA.setText("Nivell de dificultat: " + nivellIA + ".");
         } else {
-            texteEstat.setText("Partida finalitzada");
+            texteEstat.setText("Partida finalitzada.");
+            texteNivellIA.setText("Nivell de dificultat: " + nivellIA + ".");
         }
     }
 
@@ -116,10 +120,22 @@ public class GUI extends UI {
             }
         }
         buzon2 = null;
-        Object[] nivells = {0, 1, 2, 3, 4};
-        int nivellIA = (int) JOptionPane.showInputDialog(null, "Tria el nivell de dificultat (0 és el més fàcil)", "", JOptionPane.QUESTION_MESSAGE, null, nivells, nivells[0]);
+        Object[] nivells = {0, 1, 2, 3, 4, 5};
+        nivellIA = (int) JOptionPane.showInputDialog(null, "Tria el nivell de dificultat: \n"
+                + " + 0: Nivell fàcil\n"
+                + " + 1: Nivell mig\n"
+                + " + 2: Nivell difícil\n"
+                + " + 3: Nivell molt difícil\n"
+                + " + 4: Nivell professional\n"
+                + " + 5: Nivell aleatori\n"
+                + "\n"
+                + "", "", JOptionPane.QUESTION_MESSAGE, null, nivells, nivells[0]);
+        if (nivellIA == 5) {
+            Random r1 = new Random();
+            nivellIA = r1.nextInt(5);
+        }
         return nivellIA;
- 
+
     }
 
     //demanarà el nom al jugador i el guardarà
@@ -246,6 +262,7 @@ public class GUI extends UI {
     private JPanel estat() {
         JPanel estat = new JPanel();
         estat.add(texteEstat);
+        estat.add(texteNivellIA);
         estat.setSize(280, 70);
         estat.setLocation(10, 300);
         estat.setBackground(Color.orange);
