@@ -48,12 +48,15 @@ public class GUI extends UI {
         texteVictories.setSize(130, 20);
         texteVictories.setLocation(25, 5);
         texteVictories.setFont(fuente2);
+        texteVictories.setForeground(Color.DARK_GRAY);
         texteDerrotes.setSize(130, 20);
         texteDerrotes.setLocation(25, 45);
         texteDerrotes.setFont(fuente2);
+        texteDerrotes.setForeground(Color.DARK_GRAY);
         texteEmpats.setSize(130, 20);
         texteEmpats.setLocation(25, 85);
         texteEmpats.setFont(fuente2);
+        texteEmpats.setForeground(Color.DARK_GRAY);
         texteVictories.setText("Victories: " + victories);
         texteDerrotes.setText("Derrotes: " + derrotes);
         texteEmpats.setText("Empats: " + empats);
@@ -68,19 +71,34 @@ public class GUI extends UI {
         texteNivellIA.setSize(150, 50);
         texteNivellIA.setLocation(20, 0);
         texteNivellIA.setFont(fuente2);
-        if (partidaFinalitzada == -1) {
-            texteEstat.setText("Partida en curs.");
-            texteNivellIA.setText("Nivell de dificultat: " + nivellIA + ".");
-        } else {
-            texteEstat.setText("Partida finalitzada.");
-            texteNivellIA.setText("Nivell de dificultat: " + nivellIA + ".");
+
+        switch (partidaFinalitzada) {
+
+            case -1:
+                texteEstat.setText("Partida en curs.");
+                texteNivellIA.setText("Nivell de dificultat: " + nivellIA + ".");
+                break;
+            case 1:
+                texteEstat.setText("Ha guanyat el jugador X");
+                texteNivellIA.setText("Nivell de dificultat: " + nivellIA + ".");
+                break;
+            case 2:
+                texteEstat.setText("Ha guanyat el jugador O");
+                texteNivellIA.setText("Nivell de dificultat: " + nivellIA + ".");
+                break;
+            case 0:
+                texteEstat.setText("EMPAT");
+                texteNivellIA.setText("Nivell de dificultat: " + nivellIA + ".");
+                break;
+            default:
+                break;
         }
     }
 
     //reinicia el taulell abans de començar una nova partida
     @Override
     public void reiniciar() {
-        boto.setBackground(Color.green);
+        boto.setBackground(new Color(144, 238, 144));
         boto.setText("INICIAR");
         boto.setFont(fuente);
         buzon2 = null;
@@ -110,7 +128,7 @@ public class GUI extends UI {
         if (auxiliar > 0) {
             boto.setText("REINICIAR");
             boto.setFont(fuente);
-            boto.setBackground(Color.red);
+            boto.setBackground(new Color(144, 238, 144));
             buzon2 = null;
             while (buzon2 == null) {
                 try {
@@ -121,19 +139,24 @@ public class GUI extends UI {
         }
         buzon2 = null;
         Object[] nivells = {0, 1, 2, 3, 4, 5};
-        nivellIA = (int) JOptionPane.showInputDialog(null, "Tria el nivell de dificultat: \n"
-                + " + 0: Nivell fàcil\n"
-                + " + 1: Nivell mig\n"
-                + " + 2: Nivell difícil\n"
-                + " + 3: Nivell molt difícil\n"
-                + " + 4: Nivell professional\n"
-                + " + 5: Nivell aleatori\n"
-                + "\n"
-                + "", "", JOptionPane.QUESTION_MESSAGE, null, nivells, nivells[0]);
+        try {
+            nivellIA = (int) JOptionPane.showInputDialog(null, "Tria el nivell de dificultat: \n"
+                    + " + 0: Nivell fàcil\n"
+                    + " + 1: Nivell mig\n"
+                    + " + 2: Nivell difícil\n"
+                    + " + 3: Nivell molt difícil\n"
+                    + " + 4: Nivell professional\n"
+                    + " + 5: Nivell aleatori\n"
+                    + "\n"
+                    + "", "", JOptionPane.QUESTION_MESSAGE, null, nivells, nivells[0]);
+        } catch (NullPointerException e) {
+            nivellIA = 5;
+        }
         if (nivellIA == 5) {
             Random r1 = new Random();
             nivellIA = r1.nextInt(5);
         }
+
         return nivellIA;
 
     }
@@ -142,6 +165,13 @@ public class GUI extends UI {
     @Override
     public String nomJugador() {
         nom = JOptionPane.showInputDialog("Benvingut al joc TRES EN RAYA. Com et dius?");
+        try {
+            if (nom.equals("")) {
+                nom = "Jugador";
+            }
+        } catch (NullPointerException e) {
+            nom = "Jugador";
+        }
         return nom;
     }
 
@@ -164,7 +194,7 @@ public class GUI extends UI {
                         break;
                 }
                 arrayBotons[fil][col].setText(valorCaselles[fil][col]);
-                arrayBotons[fil][col].setForeground(Color.white);
+                arrayBotons[fil][col].setForeground(Color.DARK_GRAY);
             }
         }
     }
@@ -188,11 +218,13 @@ public class GUI extends UI {
         texteWarning.setLocation(5, 15);
         texteWarning.setSize(270, 20);
         texteWarning.setFont(fuente2);
-        texteWarning.setText(nom + ", t'has equivocat...");
+        texteWarning.setForeground(Color.RED);
+        texteWarning.setText(nom + ", t'has equivocat!");
         texteWarning2.setLocation(5, 40);
         texteWarning2.setSize(270, 20);
         texteWarning2.setFont(fuente2);
-        texteWarning2.setText("Per favor, introdueix valors vàlids");
+        texteWarning2.setForeground(Color.RED);
+        texteWarning2.setText("Has perdut aquesta partida!");
     }
 
     //taulells:
@@ -204,8 +236,8 @@ public class GUI extends UI {
         marcador.add(texteEmpats);
         marcador.setSize(175, 110);
         marcador.setLocation(300, 95);
-        marcador.setBackground(Color.ORANGE);
-        marcador.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.darkGray));
+        marcador.setBackground(Color.gray);
+        //marcador.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.darkGray));
         return marcador;
     }
 
@@ -218,11 +250,11 @@ public class GUI extends UI {
         JPanel taulell = new JPanel(gl);
         taulell.setSize(280, 280);
         taulell.setLocation(10, 10);
-        taulell.setBackground(Color.white);
+        taulell.setBackground(Color.lightGray);
         for (i = 0; i < caselles.length; i++) {
             for (j = 0; j < caselles.length; j++) {
                 arrayBotons[i][j] = new JButton();
-                arrayBotons[i][j].setBackground(Color.DARK_GRAY);
+                arrayBotons[i][j].setBackground(new Color(144, 238, 144));
                 taulell.add(arrayBotons[i][j]);
 
             }
@@ -265,8 +297,8 @@ public class GUI extends UI {
         estat.add(texteNivellIA);
         estat.setSize(280, 70);
         estat.setLocation(10, 300);
-        estat.setBackground(Color.orange);
-        estat.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.darkGray));
+        estat.setBackground(Color.GRAY);
+        //estat.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.darkGray));
         return estat;
     }
 
@@ -277,8 +309,8 @@ public class GUI extends UI {
         warning.add(texteWarning2);
         warning.setSize(280, 70);
         warning.setLocation(10, 380);
-        warning.setBackground(Color.orange);
-        warning.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.darkGray));
+        warning.setBackground(Color.GRAY);
+        //warning.setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.darkGray));
         return warning;
     }
 
@@ -288,8 +320,8 @@ public class GUI extends UI {
         boto.setSize(100, 100);
         iniciar.setSize(175, 215);
         iniciar.setLocation(300, 350);
-        iniciar.setBackground(Color.blue);
-        boto.setBackground(Color.green);
+        iniciar.setBackground(Color.lightGray);
+        boto.setBackground(new Color(144, 238, 144));
         boto.setText("INICIAR");
         boto.setFont(fuente);
         iniciar.add(boto);
@@ -303,7 +335,7 @@ public class GUI extends UI {
     //crea el panell fons
     private JPanel fons() {
         JPanel fons = new JPanel();
-        fons.setBackground(Color.blue);
+        fons.setBackground(Color.lightGray);
         return fons;
     }
 
