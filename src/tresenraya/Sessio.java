@@ -21,7 +21,6 @@ public class Sessio {
         jugador = new Jugador(this.interficie);
         jugadorIA = new JugadorIA(this.interficie);
         marcador = new Marcador(this.interficie);
-
     }
 
 //mètodes

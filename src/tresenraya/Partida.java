@@ -67,6 +67,7 @@ public class Partida {
             partidaFinalitzada = comprova(); //crida el mètode comprova --> 
         }
         interficie.estatPartida(partidaFinalitzada);
+        
         return partidaFinalitzada;
     }
 
@@ -87,7 +88,7 @@ public class Partida {
                 } else {
                     this.marcador.victoria();
                 }
-                return 1;
+                return 2;
             default:
                 if (taulell.complet() && taulell.guanyador() == 0) {
                     this.marcador.empats();
